@@ -65,14 +65,12 @@ class String
   }
 
   def base62_decode
-    i = 0
-    i_out = 0
-    self.split(//).reverse.each do |c|
-      place = BASE62_PRIMITIVES.size ** i
-      i_out += BASE62_PRIMITIVES[c] * place
-      i += 1
+    result = 0
+    self.split(//).reverse.each_with_index do |c,i|
+      place = 62 ** i
+      result += BASE62_PRIMITIVES[c] * place
     end
-    i_out
+    result
   end
 end
 
@@ -81,12 +79,12 @@ class Integer
   BASE62_PRIMITIVES = (0..9).collect { |i| i.to_s } + ('a'..'z').to_a + ('A'..'Z').to_a
   
   def base62_encode
-     number = self
-     result = ''
-     while(number != 0)
-        result = BASE62_PRIMITIVES[number % BASE62_PRIMITIVES.size ].to_s + result
-        number /= BASE62_PRIMITIVES.size
-     end
+    number = self
+    result = ""
+    while(number != 0)
+      result = BASE62_PRIMITIVES[number.modulo(62)].to_s + result
+      number /= 62
+    end
     result
   end
 end
