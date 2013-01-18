@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + "/base62/version"
+
 class String
   BASE62_PRIMITIVES = {
     "0" => 0,
@@ -77,14 +79,15 @@ end
 
 class Integer
   BASE62_PRIMITIVES = (0..9).collect { |i| i.to_s } + ('a'..'z').to_a + ('A'..'Z').to_a
-  
+
   def base62_encode
-    number = self
-    result = ""
-    while(number != 0)
-      result = BASE62_PRIMITIVES[number.modulo(62)].to_s + result
-      number /= 62
-    end
+     return "0" if self == 0
+     number = self
+     result = ''
+     while(number != 0)
+        result = BASE62_PRIMITIVES[number % BASE62_PRIMITIVES.size ].to_s + result
+        number /= BASE62_PRIMITIVES.size
+     end
     result
   end
 end
